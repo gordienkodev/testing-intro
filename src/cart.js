@@ -3,7 +3,7 @@ function notImplemented() {
 }
 
 function addToCart(arr, product, count) {
-  if (count === 0) throw new RangeError('Нельзя добавить нулевое количество товара.'); 
+  if (count <= 0) throw new RangeError('Нельзя добавить количество товара ноль или меньше.'); 
 
   if (count > product.stock) throw new RangeError('Нельзя добавить больше товара, чем есть на складе.');
   
@@ -33,7 +33,27 @@ function removeFromCart(cart, id) {
 function calculateCartSubtotal(cart) { 
   return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
  }
-function calculateOrderTotal() { return notImplemented(); }
+function calculateOrderTotal(cart, promo) { 
+  const subtotal = calculateCartSubtotal(cart);
+  let subdelivery;
+  let subdiscount;
+
+  if (subtotal >= 50000) {
+    subdelivery = 0;
+  }
+  else {
+    subdelivery = 30000;
+  }
+  
+  if (promo !== 'SAVE10' || subtotal < 20000) {
+    subdiscount = 0;
+  }
+  else {
+    subdiscount = subtotal * 0.1;
+  }
+  
+  return { subtotal, discount: subdiscount, delivery: subdelivery, total: subtotal - subdiscount + subdelivery };
+ }
 
 const cartApi = { addToCart, changeQuantity, removeFromCart, calculateCartSubtotal, calculateOrderTotal };
 
