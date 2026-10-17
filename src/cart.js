@@ -13,7 +13,20 @@ function addToCart(arr, product, count) {
 
   return [...arr, { ...product, quantity: count }] 
 }
-function changeQuantity() { return notImplemented(); }
+function changeQuantity(cart, id, quantity) {
+  const product = cart.find((item) => item.id === id);
+
+  if (!product) return cart;
+
+  if (quantity <= 0) throw new RangeError('Количество должно быть положительным.');
+
+  if (quantity > product.stock) {
+      throw new RangeError('Количество превышает остаток на складе.');
+    }
+
+  return cart.map((item) => item.id === id ? { ...item, quantity } : item);
+
+ }
 function removeFromCart() { return notImplemented(); }
 function calculateCartSubtotal() { return notImplemented(); }
 function calculateOrderTotal() { return notImplemented(); }
